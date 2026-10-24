@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+        <title>ForecastIQ · Overview</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+        <link rel="stylesheet" href="css/tailwind.css" />
+        <script src="js/data.js" defer></script>
+        <script src="js/shell.js" defer></script>
+        <script type="module" src="js/overview.js"></script>
+    </head>
+
+    <body data-page="overview" class="bg-background font-sans text-body-md text-on-surface antialiased">
+        <!-- ───────── Main ───────── -->
+        <main id="app-main" class="flex flex-col gap-space-xl bg-background transition-opacity">
+            <div id="error-banner" hidden role="alert" class="rounded-lg border border-error/30 bg-error-container px-space-md py-space-sm text-body-sm text-on-error-container"></div>
+
+            <div class="flex flex-wrap items-center gap-space-sm" role="toolbar" aria-label="Filters">
+            <span class="hidden items-center gap-space-xs rounded-lg bg-surface-container-lowest px-space-md py-space-xs text-data-tabular-md shadow-sm sm:flex">
+                <span class="material-symbols-outlined text-[18px] text-primary">calendar_today</span>
+                <span id="date-range">—</span>
+            </span>
+            <select id="filter-category" aria-label="Category" class="rounded-lg bg-surface-container-lowest px-space-sm py-space-xs text-label-md shadow-sm"><option value="all">Category: All</option></select>
+            <select id="filter-region" aria-label="Region" class="rounded-lg bg-surface-container-lowest px-space-sm py-space-xs text-label-md shadow-sm"><option value="all">Region: All</option></select>
+            <button id="btn-export" type="button" class="ml-auto flex items-center gap-space-xs rounded-lg bg-surface-container-lowest px-space-md py-space-xs text-label-md shadow-sm transition-colors hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-surface-container-lowest">
+                <span class="material-symbols-outlined text-[18px] text-primary">download</span>Export CSV
+            </button>
+            </div>
+
+            <div class="flex flex-col justify-between gap-space-md md:flex-row md:items-center">
+            <h1 class="text-headline-lg tracking-tight">Executive Demand &amp; Revenue Matrix</h1>
+            <div class="flex flex-wrap items-center gap-space-xs rounded-xl bg-surface-container-low p-1" role="group" aria-label="Scenario">
+                <button type="button" data-scenario="baseline" class="rounded-lg px-space-md py-1.5 text-label-md transition-all">Q3-Q4 Baseline</button>
+                <button type="button" data-scenario="promo" class="rounded-lg px-space-md py-1.5 text-label-md transition-all">Promotional Surge (+15%)</button>
+                <button type="button" data-scenario="supply_shock" class="rounded-lg px-space-md py-1.5 text-label-md transition-all">Supply Shock (-20%)</button>
+            </div>
+            </div>
+
+            <section id="kpi-grid" class="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" aria-label="Key metrics"></section>
+
+            <section class="flex flex-col gap-space-md rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+            <div class="flex flex-col justify-between gap-space-sm lg:flex-row lg:items-center">
+                <div>
+                <h2 class="text-headline-sm tracking-tight">Actual vs. Forecasted Sales</h2>
+                <p class="text-body-sm text-on-surface-variant">Historical point-of-sale data combined with ML model projections.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-space-md">
+                <ul class="flex items-center gap-space-sm text-label-md">
+                    <li class="flex items-center gap-1.5"><span class="h-0.5 w-3.5 rounded-full bg-primary-container"></span>Actual</li>
+                    <li class="flex items-center gap-1.5"><span class="w-3.5 border-t-2 border-dashed border-secondary"></span>Forecast</li>
+                    <li class="flex items-center gap-1.5 text-on-surface-variant"><span class="h-3 w-3 rounded-sm bg-primary-fixed-dim/40"></span>95% CI</li>
+                </ul>
+                <div class="flex items-center rounded-lg bg-surface-container-low p-0.5" role="group" aria-label="Granularity">
+                    <button type="button" data-grain="day" class="rounded-md px-2.5 py-1 text-label-sm">Day</button>
+                    <button type="button" data-grain="week" class="rounded-md px-2.5 py-1 text-label-sm">Week</button>
+                    <button type="button" data-grain="month" class="rounded-md px-2.5 py-1 text-label-sm">Month</button>
+                </div>
+                </div>
+            </div>
+            <div id="chart-canvas" class="relative h-80 w-full pt-4 sm:h-96"></div>
+            </section>
+
+            <section class="grid grid-cols-1 gap-gutter lg:grid-cols-2">
+            <div class="flex flex-col justify-between rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                <div class="mb-space-md">
+                <h3 class="text-headline-sm">Sales by Category</h3>
+                <p class="text-body-sm text-on-surface-variant">Contribution share and growth vs previous 30 days</p>
+                </div>
+                <div id="category-bars" class="grid h-56 grid-cols-4 items-end gap-space-md pb-2 pt-6"></div>
+                <div class="flex items-center justify-between border-t border-surface-container-low pt-space-md text-body-sm text-on-surface-variant">
+                <span>Total Portfolio Revenue: <strong id="total-revenue" class="font-semibold text-on-surface">—</strong></span>
+                <span class="flex items-center gap-1 font-semibold text-tertiary">
+                    <span class="material-symbols-outlined text-[16px]">category</span><span id="reconciliation">—</span></span>
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-between rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                <div class="mb-space-md">
+                <h3 class="text-headline-sm">Sales by Region</h3>
+                <p class="text-body-sm text-on-surface-variant">Regional fulfillment hubs &amp; pipeline distribution</p>
+                </div>
+                <div id="region-bars" class="flex flex-col gap-space-md"></div>
+                <div class="border-t border-surface-container-low pt-space-md text-body-sm text-on-surface-variant">
+                Fastest Growing: <strong id="fastest-region" class="font-semibold text-on-surface">—</strong>
+                </div>
+            </div>
+            </section>
+
+            <section class="grid grid-cols-1 gap-gutter xl:grid-cols-12">
+            <div class="flex flex-col justify-between rounded-xl bg-surface-container-lowest p-space-lg shadow-sm xl:col-span-7">
+                <div>
+                <div class="pb-space-md">
+                    <h3 class="text-headline-sm">Top 5 Revenue Drivers</h3>
+                    <p class="text-body-sm text-on-surface-variant">High-velocity SKUs demanding priority inventory allocation</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[580px] border-collapse text-left">
+                    <thead>
+                        <tr class="bg-surface-container-low text-label-sm uppercase tracking-wider text-outline">
+                        <th scope="col" class="rounded-l-lg px-3 py-2.5">Product</th>
+                        <th scope="col" class="px-3 py-2.5">Category</th>
+                        <th scope="col" class="px-3 py-2.5 text-right">Last 30 Days</th>
+                        <th scope="col" class="px-3 py-2.5 text-right">Growth</th>
+                        <th scope="col" class="px-3 py-2.5">Stock Health</th>
+                        <th scope="col" class="rounded-r-lg px-3 py-2.5 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-body" class="divide-y divide-surface-container-low"></tbody>
+                    </table>
+                </div>
+                </div>
+                <p id="sku-count" class="pt-space-md text-body-sm text-on-surface-variant">—</p>
+            </div>
+
+            <div class="flex flex-col rounded-xl bg-surface-container-lowest p-space-lg shadow-sm xl:col-span-5">
+                <div class="flex items-center justify-between pb-space-md">
+                <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 animate-pulse rounded-full bg-error"></span>
+                    <h3 class="text-headline-sm">Critical Stock-out &amp; Demand Alerts</h3>
+                </div>
+                <span id="urgent-count" class="rounded-full bg-error-container px-2 py-0.5 text-[11px] font-bold text-on-error-container">—</span>
+                </div>
+                <div id="alerts-list" class="flex flex-col gap-space-sm"></div>
+            </div>
+            </section>
+        </main>
+    </body>
+</html>

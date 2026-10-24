@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+            <title>ForecastIQ · Settings</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+            <link rel="stylesheet" href="css/tailwind.css" />
+            <script src="js/data.js" defer></script>
+            <script src="js/shell.js" defer></script>
+            <script src="js/settings.js" defer></script>
+        </head>
+        <body data-page="settings" class="bg-background font-sans text-body-md text-on-surface antialiased">
+
+            <main>
+                <form id="settings-form" class="flex max-w-4xl flex-col gap-space-lg" novalidate>
+                <div id="settings-error" hidden role="alert" class="rounded-lg bg-error-container px-space-md py-space-sm text-body-sm text-on-error-container"></div>
+
+                <section class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                    <h2 class="text-headline-sm">Forecast defaults</h2>
+                    <p class="mb-space-md text-body-sm text-on-surface-variant">Applied when you open Sales Forecast and Overview.</p>
+                    <div class="grid gap-space-md sm:grid-cols-3">
+                    <label class="flex flex-col gap-1 text-label-md">Horizon
+                        <select data-key="horizon" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md">
+                        <option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option>
+                        </select></label>
+                    <label class="flex flex-col gap-1 text-label-md">Granularity
+                        <select data-key="granularity" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md">
+                        <option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option>
+                        </select></label>
+                    <label class="flex flex-col gap-1 text-label-md">Confidence interval
+                        <select data-key="confidence" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md">
+                        <option value="80">80%</option><option value="95">95%</option><option value="99">99%</option>
+                        </select></label>
+                    </div>
+                </section>
+
+                <section class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                    <h2 class="text-headline-sm">Inventory rules</h2>
+                    <p class="mb-space-md text-body-sm text-on-surface-variant">Control when a product is flagged and when a purchase order needs approval.</p>
+                    <div class="grid gap-space-md sm:grid-cols-2">
+                    <label class="flex flex-col gap-1 text-label-md">Safety stock (days of sales)
+                        <input data-key="safetyDays" type="number" min="0" max="60" step="1" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md" /></label>
+                    <label class="flex flex-col gap-1 text-label-md">Base lead time (days)
+                        <input data-key="leadDays" type="number" min="1" max="60" step="1" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md" /></label>
+                    <label class="flex flex-col gap-1 text-label-md">Lead time buffer (days)
+                        <input data-key="leadBuffer" type="number" min="0" max="30" step="0.1" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md" /></label>
+                    <label class="flex flex-col gap-1 text-label-md">Currency
+                        <select data-key="currency" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="JOD">JOD</option>
+                            <option value="SAR">SAR</option>
+                            <option value="AED">AED</option>
+                            <option value="EGP">EGP</option>
+                        </select>
+                    </label>
+                    <label class="flex flex-col gap-1 text-label-md">Auto-approve purchase orders up to
+                        <input data-key="autoApproveLimit" type="number" min="0" step="100" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md" /></label>
+                    </div>
+                </section>
+
+                <section class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                    <h2 class="text-headline-sm">Alerts</h2>
+                    <p class="mb-space-md text-body-sm text-on-surface-variant">Choose what shows in the notification bell.</p>
+                    <div class="flex flex-col divide-y divide-surface-container-low">
+                        <label class="flex items-center justify-between py-3 text-body-md">Critical stock (runs out before a new order can arrive)<input data-key="alertCritical" type="checkbox" class="h-5 w-5 accent-primary" /></label>                    
+                        <label class="flex items-center justify-between py-3 text-body-md">Low stock (≤ 14 days or below reorder point)<input data-key="alertLow" type="checkbox" class="h-5 w-5 accent-primary" /></label>
+                        <label class="flex items-center justify-between py-3 text-body-md">Model drift detected<input data-key="alertDrift" type="checkbox" class="h-5 w-5 accent-primary" /></label>
+                    </div>
+                </section>
+
+                <section class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+                    <h2 class="text-headline-sm">Data retention</h2>
+                    <p class="mb-space-md text-body-sm text-on-surface-variant">Your uploaded data stays in this browser only and is deleted automatically after this period. Demo data is never deleted. If you choose a shorter period, older data is deleted the next time you open a page.</p>
+                    <label class="flex flex-col gap-1 text-label-md sm:max-w-xs">Delete my data after
+                        <select data-key="retention" class="rounded-lg bg-surface-container-low px-3 py-2 text-body-md">
+                            <option value="session">When I close the tab</option>
+                            <option value="1">1 day</option>
+                            <option value="7">7 days</option>
+                            <option value="30">30 days</option>
+                        </select>
+                    </label>
+                </section>
+
+                <div class="flex items-center justify-end gap-space-sm">
+                    <button id="btn-reset" type="button" class="rounded-lg px-space-md py-space-sm text-label-md text-on-surface-variant hover:bg-surface-container-low">Reset to defaults</button>
+                    <button type="submit" class="rounded-lg bg-primary px-space-lg py-space-sm text-label-md text-on-primary shadow-sm hover:bg-primary-container">Save changes</button>
+                </div>
+                </form>
+            </main>
+        </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+        <title>ForecastIQ · Demand forecasting and inventory planning for retail</title>
+        <meta name="description" content="Upload your sales history and see demand forecasts, stock-out risks and suggested reorders. Runs in your browser." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+        <link rel="stylesheet" href="css/tailwind.css" />
+        <script src="js/data.js" defer></script>
+        <script src="js/index.js" defer></script>
+    </head>
+
+    <body class="bg-background font-sans text-body-md text-on-surface antialiased">
+        <noscript>
+            <p style="margin:0;padding:1rem;background:#fde2e0;color:#7a1410;font-family:system-ui,sans-serif;text-align:center">
+                ForecastIQ needs JavaScript to read your file and draw the forecast. Please enable JavaScript and reload.
+            </p>
+        </noscript>
+        <div class="bg-inverse-surface text-inverse-on-surface">
+            <div class="mx-auto max-w-6xl px-4 sm:px-space-lg">
+                <header class="flex h-16 items-center justify-between">
+                    <a href="index.html" class="flex items-center gap-space-sm" aria-label="ForecastIQ home">
+                        <span class="material-symbols-outlined text-[28px] text-primary-fixed-dim">query_stats</span>
+                        <span class="text-headline-sm font-bold tracking-tight text-white">ForecastIQ</span>
+                    </a>
+                    <nav aria-label="Primary" class="flex items-center gap-space-md text-label-md">
+                        <a href="overview.html" class="rounded-lg px-space-sm py-1 hover:bg-white/10 hover:text-white">Dashboard</a>
+                        <a href="settings.html" class="hidden rounded-lg px-space-sm py-1 hover:bg-white/10 hover:text-white sm:block">Settings</a>
+                    </nav>
+                </header>
+
+                <section class="grid items-center gap-space-xl pb-16 pt-10 lg:grid-cols-2 lg:pb-24 lg:pt-16">
+                    <div class="flex flex-col gap-space-md">
+                        <h1 class="max-w-xl text-4xl font-bold tracking-tight text-white sm:text-5xl">Know what to reorder before it sells out.</h1>
+                        <p class="max-w-lg text-body-md text-outline-variant">Upload your sales history from Excel or CSV. ForecastIQ projects demand, flags the products running low, and suggests how much to order.</p>
+                        <div class="flex flex-wrap items-center gap-space-sm pt-space-xs">
+                            <a id="cta-primary" href="data-model.html" class="rounded-lg bg-primary-container px-space-lg py-space-sm text-label-md font-bold text-on-primary transition-colors hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Upload your data</a>
+                            <button id="cta-demo" type="button" data-action="load-demo" data-then="overview.html" class="rounded-lg bg-white/10 px-space-lg py-space-sm text-label-md font-semibold text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60">Try demo data</button>
+                            <button type="button" data-action="download-template" class="rounded-lg px-space-md py-space-sm text-label-md text-primary-fixed-dim transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60">Download Excel template</button>
+                        </div>
+                        <p id="dataset-status" hidden role="status" class="text-body-sm text-tertiary-fixed"></p>
+                        <p class="text-body-sm text-outline-variant">Your file is processed and stored in your browser. Nothing leaves your device.</p>
+                    </div>
+
+                    <figure class="rounded-xl bg-white/5 p-space-lg">
+                        <figcaption class="mb-space-sm flex flex-wrap items-center justify-between gap-space-sm text-label-md">
+                            <span class="font-semibold text-white">Weekly sales and 14-week forecast</span>
+                            <span class="flex items-center gap-space-sm text-label-sm text-outline-variant">
+                                <span class="flex items-center gap-1.5"><span class="h-0.5 w-3.5 rounded-full bg-white"></span>Actual</span>
+                                <span class="flex items-center gap-1.5"><span class="w-3.5 border-t-2 border-dashed border-primary-fixed-dim"></span>Forecast</span>
+                                <span class="flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-primary-fixed-dim/30"></span>95% range</span>
+                            </span>
+                        </figcaption>
+                        <svg viewBox="0 0 520 250" class="h-auto w-full" role="img" aria-label="Example chart: weekly sales rising and falling, then a dashed forecast with a shaded confidence band"><line x1="8" x2="512" y1="226.0" y2="226.0" class="stroke-white/10"/><line x1="8" x2="512" y1="156.7" y2="156.7" class="stroke-white/10"/><line x1="8" x2="512" y1="87.4" y2="87.4" class="stroke-white/10"/><line x1="8" x2="512" y1="16.0" y2="16.0" class="stroke-white/10"/><path d="M397.1 114.6 L405.9 109.3 L414.7 104.3 L423.6 99.3 L432.4 93.9 L441.3 88.3 L450.1 82.3 L458.9 75.9 L467.8 69.2 L476.6 62.2 L485.5 54.9 L494.3 47.4 L503.2 39.8 L512.0 32.1 L512.0 132.4 L503.2 137.6 L494.3 142.5 L485.5 147.2 L476.6 151.5 L467.8 155.4 L458.9 158.9 L450.1 161.8 L441.3 164.1 L432.4 165.7 L423.6 166.5 L414.7 166.5 L405.9 165.4 L397.1 162.8 Z" class="fill-primary-fixed-dim/30"/><line x1="388.2" x2="388.2" y1="16" y2="226" class="stroke-white/30" stroke-dasharray="2 4"/><text x="382.2" y="26" text-anchor="end" font-size="11" class="fill-white/60">Today</text><path d="M8.0 202.3 L16.8 185.0 L25.7 186.9 L34.5 206.7 L43.4 165.2 L52.2 158.1 L61.1 184.1 L69.9 164.8 L78.7 146.1 L87.6 137.3 L96.4 162.9 L105.3 143.2 L114.1 110.3 L122.9 113.1 L131.8 140.7 L140.6 112.1 L149.5 89.5 L158.3 102.4 L167.2 111.7 L176.0 89.6 L184.8 77.5 L193.7 124.2 L202.5 93.1 L211.4 86.9 L220.2 107.0 L229.1 126.1 L237.9 103.1 L246.7 80.4 L255.6 122.1 L264.4 120.7 L273.3 97.6 L282.1 107.9 L290.9 131.1 L299.8 140.1 L308.6 120.5 L317.5 132.3 L326.3 142.4 L335.2 133.9 L344.0 124.0 L352.8 140.2 L361.7 154.4 L370.5 135.4 L379.4 119.7 L388.2 146.7" fill="none" stroke-width="2.5" stroke-linejoin="round" class="stroke-white"/><path d="M388.2 146.7 L397.1 138.7 L405.9 137.4 L414.7 135.4 L423.6 132.9 L432.4 129.8 L441.3 126.2 L450.1 122.0 L458.9 117.4 L467.8 112.3 L476.6 106.8 L485.5 101.0 L494.3 95.0 L503.2 88.7 L512.0 82.3" fill="none" stroke-width="2.5" stroke-dasharray="6 5" class="stroke-primary-fixed-dim"/></svg>
+                        <ul class="mt-space-md flex flex-col gap-space-xs text-body-sm">
+                            <li class="flex items-center justify-between gap-space-sm rounded-lg bg-white/5 px-space-md py-space-xs"><span class="text-white">Laptop Pro 14"</span><span class="rounded-full bg-error-container px-2 py-0.5 text-label-sm font-semibold text-on-error-container">5 days of cover</span></li>
+                            <li class="flex items-center justify-between gap-space-sm rounded-lg bg-white/5 px-space-md py-space-xs"><span class="text-white">Standing Desk</span><span class="rounded-full bg-secondary-container px-2 py-0.5 text-label-sm font-semibold text-on-secondary-container">9 days of cover</span></li>
+                        </ul>
+                    </figure>
+                </section>
+            </div>
+        </div>
+
+        <main class="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-space-lg">
+
+            <section aria-labelledby="h-pages">
+                <h2 id="h-pages" class="mb-space-lg max-w-xl text-headline-md tracking-tight">One dashboard for demand, stock and products</h2>
+                <ul class="grid gap-x-gutter sm:grid-cols-2">
+                    <li class="border-t border-surface-container-high py-space-md"><a href="overview.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">analytics</span><span><span class="block text-label-md font-semibold group-hover:underline">Overview</span><span class="text-body-sm text-on-surface-variant">Revenue, forecast accuracy, top products and urgent stock alerts, with filters by category and region.</span></span></a></li>
+                    <li class="border-t border-surface-container-high py-space-md"><a href="sales-forecast.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">trending_up</span><span><span class="block text-label-md font-semibold group-hover:underline">Sales Forecast</span><span class="text-body-sm text-on-surface-variant">Daily, weekly or monthly projections with a confidence range and what-if scenarios.</span></span></a></li>
+                    <li class="border-t border-surface-container-high py-space-md"><a href="inventory-risk.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">warning</span><span><span class="block text-label-md font-semibold group-hover:underline">Inventory Risk</span><span class="text-body-sm text-on-surface-variant">Days of cover per product, reorder points and suggested order sizes.</span></span></a></li>
+                    <li class="border-t border-surface-container-high py-space-md"><a href="products.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">inventory_2</span><span><span class="block text-label-md font-semibold group-hover:underline">Products</span><span class="text-body-sm text-on-surface-variant">Search and sort every product by revenue, recent sales, growth or stock health.</span></span></a></li>
+                    <li class="border-t border-surface-container-high py-space-md"><a href="data-model.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">schema</span><span><span class="block text-label-md font-semibold group-hover:underline">Data &amp; Model</span><span class="text-body-sm text-on-surface-variant">Upload files, map columns, and see how the forecast model performed on past data.</span></span></a></li>
+                    <li class="border-t border-surface-container-high py-space-md"><a href="settings.html" class="group flex gap-space-md"><span class="material-symbols-outlined text-primary">tune</span><span><span class="block text-label-md font-semibold group-hover:underline">Settings</span><span class="text-body-sm text-on-surface-variant">Safety stock, lead time, approval limits and which alerts you see.</span></span></a></li>
+                </ul>
+            </section>
+
+            <!-- Steps (a real sequence) -->
+            <section aria-labelledby="h-steps">
+                <h2 id="h-steps" class="mb-space-lg text-headline-md tracking-tight">From spreadsheet to forecast in three steps</h2>
+                <ol class="grid gap-space-lg md:grid-cols-3">
+                    <li class="flex flex-col gap-space-xs"><span class="text-headline-lg tracking-tight text-primary">1</span><h3 class="text-label-md font-semibold">Add your sales</h3><p class="text-body-sm text-on-surface-variant">Drop in an .xlsx, .xls or .csv file up to 25 MB, or start with the Excel template.</p></li>
+                    <li class="flex flex-col gap-space-xs"><span class="text-headline-lg tracking-tight text-primary">2</span><h3 class="text-label-md font-semibold">Match your columns</h3><p class="text-body-sm text-on-surface-variant">We guess which column is which. Check the matches and confirm.</p></li>
+                    <li class="flex flex-col gap-space-xs"><span class="text-headline-lg tracking-tight text-primary">3</span><h3 class="text-label-md font-semibold">Read the forecast</h3><p class="text-body-sm text-on-surface-variant">Open the dashboard to see demand, risks and what to reorder.</p></li>
+                </ol>
+            </section>
+
+            <!-- Data requirements -->
+            <section aria-labelledby="h-cols">
+                <h2 id="h-cols" class="mb-space-xs text-headline-md tracking-tight">What your file needs</h2>
+                <p class="mb-space-md max-w-xl text-body-md text-on-surface-variant">Four columns are required. The rest unlock extra pages and filters. Two years of history gives the best seasonal forecasts.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[560px] border-collapse text-left text-body-sm">
+                    <thead><tr class="bg-surface-container-low text-label-md text-on-surface-variant"><th scope="col" class="rounded-l-lg px-3 py-2.5">Column</th><th scope="col" class="px-3 py-2.5">Required</th><th scope="col" class="rounded-r-lg px-3 py-2.5">What it unlocks</th></tr></thead>
+                    <tbody class="divide-y divide-surface-container-high">
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Date</th><td class="px-3 py-2.5">Yes</td><td class="px-3 py-2.5">Trends, seasonality and every forecast</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Product</th><td class="px-3 py-2.5">Yes</td><td class="px-3 py-2.5">Product list, top sellers, reorder suggestions</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Quantity</th><td class="px-3 py-2.5">Yes</td><td class="px-3 py-2.5">Units per day and days of cover</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Sales</th><td class="px-3 py-2.5">Yes</td><td class="px-3 py-2.5">Revenue totals and revenue forecast</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Category</th><td class="px-3 py-2.5 text-on-surface-variant">Optional</td><td class="px-3 py-2.5">Category filter and breakdown</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Region</th><td class="px-3 py-2.5 text-on-surface-variant">Optional</td><td class="px-3 py-2.5">Region filter and breakdown</td></tr>
+                        <tr><th scope="row" class="px-3 py-2.5 font-semibold">Current stock</th><td class="px-3 py-2.5 text-on-surface-variant">Optional</td><td class="px-3 py-2.5">Inventory Risk page and stock alerts</td></tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="mt-space-md flex flex-wrap gap-space-sm">
+                    <button type="button" data-action="download-template" class="flex items-center gap-space-xs rounded-lg bg-surface-container-low px-space-md py-space-sm text-label-md transition-colors hover:bg-surface-container-high disabled:opacity-60"><span class="material-symbols-outlined text-[18px] text-primary">download</span>Download Excel template</button>
+                    <a href="data-model.html" class="rounded-lg bg-primary px-space-lg py-space-sm text-label-md text-on-primary transition-colors hover:bg-primary-container">Upload your data</a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="border-t border-surface-container-high">
+            <div class="mx-auto flex max-w-6xl flex-col justify-between gap-space-sm px-4 py-space-lg text-body-sm text-on-surface-variant sm:flex-row sm:px-space-lg">
+                <span>ForecastIQ · Retail intelligence</span>
+                <span>Forecasts use damped additive Holt-Winters and run in your browser.</span>
+            </div>
+        </footer>
+    </body>
+</html>

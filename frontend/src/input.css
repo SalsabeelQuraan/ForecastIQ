@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-feature-settings: "cv11", "ss01"; overscroll-behavior: none; }
+    table, .tabular { font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 0.375rem; }
+    select, input[type="number"], input[type="url"], input[type="search"] { border: 1px solid transparent; transition: border-color .15s, box-shadow .15s; }
+    select:hover, input:hover { border-color: #d8dde5; }
+    select:focus, input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+    button:not(:disabled), select { cursor: pointer; }
+    tbody tr { transition: background-color .12s; }
+    tbody tr:hover { background-color: rgba(241,243,246,.6); }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+}
+
+@layer components {
+    ::-webkit-scrollbar { display: none; }
+    .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400; }
+}
+
+@media print {
+    body[data-page="overview"] aside,
+    body[data-page="overview"] header,
+    body[data-page="overview"] #nav-overlay,
+    body[data-page="overview"] #btn-export { display: none !important; }
+    body[data-page="overview"] main { padding: 0 !important; }
+}
